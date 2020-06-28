@@ -6,11 +6,9 @@ const cors = require('cors')
 // require route files
 const exampleRoutes = require('./app/routes/example_routes')
 const userRoutes = require('./app/routes/user_routes')
-<<<<<<< HEAD
+
 const productRoutes = require('./app/routes/product_routes')
 const orderRoutes = require('./app/routes/order_routes')
-=======
->>>>>>> Initial commit
 
 // require middleware
 const errorHandler = require('./lib/error_handler')
@@ -34,7 +32,8 @@ const clientDevPort = 7165
 // use createIndex instead of deprecated ensureIndex
 mongoose.connect(db, {
   useNewUrlParser: true,
-  useCreateIndex: true
+  useCreateIndex: true,
+  useUnifiedTopology: true 
 })
 
 // instantiate express application object
@@ -68,11 +67,9 @@ app.use(requestLogger)
 // register route files
 app.use(exampleRoutes)
 app.use(userRoutes)
-<<<<<<< HEAD
+
 app.use(productRoutes)
 app.use(orderRoutes)
-=======
->>>>>>> Initial commit
 
 // register error handling middleware
 // note that this comes after the route middlewares, because it needs to be
