@@ -12,7 +12,11 @@ const orderSchema = new mongoose.Schema({
     enum: ['Cash', 'Debit', 'Credit']
   },
   img: Buffer,
-  phone: Number,
+  phone: {
+    type: Number,
+    required: true,
+    unique: true
+  },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
