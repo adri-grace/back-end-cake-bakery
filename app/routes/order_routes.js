@@ -4,7 +4,7 @@ const express = require('express')
 const passport = require('passport')
 
 // pull in Mongoose model for examples
-const Order = require('../models/example')
+const Order = require('../models/order')
 
 // this is a collection of methods that help us detect situations when we need
 // to throw a custom error
@@ -19,6 +19,7 @@ const requireOwnership = customErrors.requireOwnership
 // this is middleware that will remove blank fields from `req.body`, e.g.
 // { example: { title: '', text: 'foo' } } -> { example: { text: 'foo' } }
 const removeBlanks = require('../../lib/remove_blank_fields')
+const product = require('../models/product')
 // passing this as a second argument to `router.<verb>` will make it
 // so that a token MUST be passed for that route to be available
 // it will also set `req.user`
@@ -69,12 +70,22 @@ router.post('/orders', requireToken, (req, res, next) => {
     .catch(next)
 })
 
+// function to add product to order
+const addToOrder = (userId, productId) => {
+  return Product.findOne({_id:productId}) // this finds the product by its ID
+  .then(product => {
+    return User.findOne({_id:userId}) // find the order's user
+    .then(user => {
+      user.orders.items.push(product);
+      return user.orders.save();
+    })
+  })
+}
 // UPDATE
 router.patch('/orders/:id', requireToken, removeBlanks, (req, res, next) => {
   // if the client attempts to change the `owner` property by including a new
   // owner, prevent that by deleting that key/value pair
   delete req.body.order.owner
-
   Order.findById(req.params.id)
     .then(handle404)
     .then(order => {
