@@ -4,6 +4,7 @@ const passport = require('passport')
 
 // pull in Mongoose model for examples
 const Product = require('../models/product')
+const User = require('../models/user')
 
 // this is a collection of methods that help us detect situations when we need
 // to throw a custom error
@@ -103,6 +104,29 @@ router.delete('/products/:id', requireToken, (req, res, next) => {
     // send back 204 and no content if the deletion succeeded
     .then(() => res.sendStatus(204))
     // if an error occurs, pass it to the handler
+    .catch(next)
+})
+
+// function to add product to order
+const addToOrder = (userId, productId) => {
+  return Product.findOne({_id: productId}) // this finds the product by its ID
+    .then(product => {
+      return User.findOne({_id: userId}) // find the order's user
+        .then(user => {
+          user.order.items.push(product)
+          return user.orders.save()
+        })
+    })
+}
+
+// order a product
+router.get('/products/:id/order', requireToken, (req, res, next) => {
+  console.log(req.params)
+  /* id of the client, or the logged in user if you're using passeport or some other auth manager */
+  User.findOne({_id: req.user.id})
+    .then(user => {
+      return addToOrder(user.id, req.params.id)
+    })
     .catch(next)
 })
 

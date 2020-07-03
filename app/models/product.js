@@ -12,10 +12,10 @@ const productSchema = new mongoose.Schema({
   category: {
     type: String,
     enum: [
-      "cakes and cupcakes",
-      "crafts",
-      "treats"
-      ],
+      'cakes and cupcakes',
+      'crafts',
+      'treats'
+    ],
     required: true
   },
   price: Number,
