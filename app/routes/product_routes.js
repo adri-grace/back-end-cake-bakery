@@ -137,12 +137,10 @@ router.delete('/products/:id/order', requireToken, (req, res, next) => {
     .then(user => {
       return Order.findOne({owner: req.user.id})
         .then(order => {
-          order.items.forEach(function (item, index) {
-            if (item.id === req.params.id) {
-              order.items[index].remove()
-              return order.save()
-            }
-          })
+          const index = order.items.findIndex(item => (item.id === req.params.id))
+          order.items.splice(index, 1)
+          order.save()
+          return order
         })
         .then(() => res.sendStatus(204))
     })
