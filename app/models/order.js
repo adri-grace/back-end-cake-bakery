@@ -7,11 +7,15 @@ const orderSchema = new mongoose.Schema({
   address: String,
   message: String,
   total: Number,
+  active: {
+    type: Boolean,
+    default: false
+  },
   payment: {
     type: String,
     enum: ['Cash', 'Debit', 'Credit']
   },
-  img: Buffer,
+  imageURL: String,
   phone: {
     type: Number,
     required: true,
