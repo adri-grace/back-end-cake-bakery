@@ -131,4 +131,22 @@ router.get('/products/:id/order', requireToken, (req, res, next) => {
     .catch(next)
 })
 
+// delete a product from an order
+router.delete('/products/:id/order', requireToken, (req, res, next) => {
+  User.findOne({_id: req.user.id})
+    .then(user => {
+      return Order.findOne({owner: req.user.id})
+        .then(order => {
+          order.items.forEach(function (item, index) {
+            if (item.id === req.params.id) {
+              order.items[index].remove()
+              return order.save()
+            }
+          })
+        })
+        .then(() => res.sendStatus(204))
+    })
+    .catch(next)
+})
+
 module.exports = router
