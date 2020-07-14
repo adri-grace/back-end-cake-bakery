@@ -4,23 +4,20 @@ const productSchema = Product.schema
 
 const orderSchema = new mongoose.Schema({
   items: [productSchema],
-  address: String,
   message: String,
   total: Number,
   active: {
     type: Boolean,
     default: false
   },
-  payment: {
-    type: String,
-    enum: ['Cash', 'Debit', 'Credit']
-  },
   imageURL: String,
+  name: String,
   phone: {
     type: Number,
     required: true,
     unique: true
   },
+  email: String,
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

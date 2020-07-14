@@ -19,6 +19,7 @@ const productSchema = new mongoose.Schema({
     required: true
   },
   price: Number,
+  qty: Number,
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

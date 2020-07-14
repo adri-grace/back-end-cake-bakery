@@ -29,7 +29,7 @@ const requireToken = passport.authenticate('bearer', { session: false })
 const router = express.Router()
 
 // INDEX
-router.get('/products', (req, res, next) => {
+router.get('/items', (req, res, next) => {
   Product.find()
     .then(products => {
       // `examples` will be an array of Mongoose documents
@@ -44,13 +44,37 @@ router.get('/products', (req, res, next) => {
 })
 
 // SHOW
-router.get('/products/:id', (req, res, next) => {
+router.get('/items/:id', (req, res, next) => {
   // req.params.id will be set based on the `:id` in the route
   Product.findById(req.params.id)
     .then(handle404)
     // if `findById` is succesful, respond with 200 and "example" JSON
     .then(product => res.status(200).json({ product: product.toObject() }))
     // if an error occurs, pass it to the handler
+    .catch(next)
+})
+
+// SHOW cakes and cupcakes
+router.get('/items/bakery', (req, res, next) => {
+  Product.find({category: 'cakes and cupcakes'})
+    .then(handle404)
+    .then(product => res.status(200).json({ product: product.toObject() }))
+    .catch(next)
+})
+
+// SHOW crafts
+router.get('/items/crafts', (req, res, next) => {
+  Product.find({category: 'crafts'})
+    .then(handle404)
+    .then(product => res.status(200).json({ product: product.toObject() }))
+    .catch(next)
+})
+
+// SHOW treats
+router.get('/items/treats', (req, res, next) => {
+  Product.find({category: 'treats'})
+    .then(handle404)
+    .then(product => res.status(200).json({ product: product.toObject() }))
     .catch(next)
 })
 
